@@ -1,0 +1,1 @@
+ Install-WindowsFeature -name Web-Server -IncludeManagementTools -Source "Windows Update"
