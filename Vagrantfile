@@ -8,7 +8,9 @@ ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
 
 if ! File.exists?('./NDP452-KB2901907-x86-x64-AllOS-ENU.exe')
   puts '.Net 4.5.2 installer could not be found!'
-  puts "Please run:\n curl -O http://download.microsoft.com/download/E/2/1/E21644B5-2DF2-47C2-91BD-63C560427900/NDP452-KB2901907-x86-x64-AllOS-ENU.exe"
+  puts "Please run:\n curl -O http://download.microsoft.com/download/E/2/1/E21644B5-2DF2-47C2-91BD-63C560427900/NDP452-KB2901907-x86-x64-AllOS-ENU.exe
+  or
+  invoke-webrequest http://download.microsoft.com/download/E/2/1/E21644B5-2DF2-47C2-91BD-63C560427900/NDP452-KB2901907-x86-x64-AllOS-ENU.exe -OutFile NDP452-KB2901907-x86-x64-AllOS-ENU.exe"
   exit 1
 end
 
@@ -20,14 +22,25 @@ end
 
 if ! File.exists?('./SQLEXPRWT_x64_ENU.exe')
   puts 'SQL Server installer could not be found!'
-  puts "Please run:\n curl -O http://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRWT_x64_ENU.exe"
+  puts "Please run:\n curl -O http://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRWT_x64_ENU.exe
+  or 
+  Invoke-WebRequest http://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRWT_x64_ENU.exe -OutFile SQLEXPRWT_x64_ENU.exe"
+  exit 1
+end
+
+if ! File.exists?('./SSMS-Setup-ENU.exe')
+  puts 'SQL Server management studio installer could not be found!'
+  puts "Please run:\n curl -O https://download.microsoft.com/download/9/3/3/933EA6DD-58C5-4B78-8BEC-2DF389C72BE0/SSMS-Setup-ENU.exe
+  or 
+  Invoke-WebRequest https://download.microsoft.com/download/9/3/3/933EA6DD-58C5-4B78-8BEC-2DF389C72BE0/SSMS-Setup-ENU.exe"
   exit 1
 end
 
 
+
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|  
 
-  config.vm.box = "ferventcoder/win2008r2-x64-nocm"
+  config.vm.box = "mwrock/Windows2012R2"
   config.vm.guest = :windows
   
   config.vm.communicator = "winrm"
@@ -39,7 +52,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
  
   # .NET 4.5
   config.vm.provision :shell, path: "vagrant-scripts/install-dot-net.ps1"  
-  config.vm.provision :shell, path: "vagrant-scripts/install-dot-net-45.cmd"
+  #config.vm.provision :shell, path: "vagrant-scripts/install-dot-net-45.cmd" (4.6 pre-installed in 2016)
   #config.vm.provision :shell, path: "vagrant-scripts/install-msbuild-tools-2013.cmd"
   
   # Database
@@ -50,12 +63,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :shell, path: "vagrant-scripts/create-database.cmd"
    
   # IIS   
-  config.vm.provision :shell, path: "vagrant-scripts/install-iis.cmd"
+  config.vm.provision :shell, path: "vagrant-scripts/install-iis.ps1"
     
   #Create Website
   config.vm.provision :shell, path: "vagrant-scripts/copy-website.ps1"
   #config.vm.provision :shell, path: "vagrant-scripts/build-website.cmd"
   config.vm.provision :shell, path: "vagrant-scripts/creating-website-in-iis.cmd"
   config.vm.provision :shell, path: "vagrant-scripts/setup-permissions-for-website-folder.ps1"
+  config.vm.provision :shell, path: "vagrant-scripts/break-site.ps1"
   
 end

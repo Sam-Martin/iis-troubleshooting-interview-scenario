@@ -6,3 +6,6 @@ C:\vagrant\SQLEXPRWT_x64_ENU.exe /Q /Action=install /INDICATEPROGRESS /INSTANCEN
 echo Disabling firewall
 netsh advfirewall set allprofiles state off
 echo Done!
+
+echo Install SSMS
+C:\vagrant\SSMS-Setup-ENU.exe /install /quiet

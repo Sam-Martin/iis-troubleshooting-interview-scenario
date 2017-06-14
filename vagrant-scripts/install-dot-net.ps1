@@ -3,4 +3,4 @@ $ErrorActionPreference = "Stop"
 
 import-module servermanager
 echo "Enabling .NET Framework"
-add-windowsfeature as-net-framework
+add-windowsfeature as-net-framework, Web-Asp-Net45
