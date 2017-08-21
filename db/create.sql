@@ -117,3 +117,19 @@ CREATE USER test FOR LOGIN test;
 GO
 
 EXEC sp_addrolemember N'db_owner', N'test'
+
+
+-- Creates a table and some values
+USE [test]
+GO
+/****** Object:  Table [dbo].[Test]    Script Date: 08/21/2017 13:33:03 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Test](
+	[x] [smallint] NULL
+) ON [PRIMARY]
+GO
+
+INSERT INTO [dbo].[Test] (x) VALUES (33)
